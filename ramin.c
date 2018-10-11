@@ -6,6 +6,6 @@
 int main()
 {
 
-printf("hello shehzu\n");
+printf("hello Ramin shehzu\n");
 return 0;
 }

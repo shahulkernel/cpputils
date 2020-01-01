@@ -1,0 +1,4 @@
+
+
+
+g++ -o list0101 -pedantic -std=c++11 list0101.cpp

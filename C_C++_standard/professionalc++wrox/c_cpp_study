@@ -1,0 +1,68 @@
+
+##Note1:
+If the C-style string is stored as a char[] , then sizeof() returns the actual
+memory used by the string, including the ' \0 ' character. For example:
+char text1[] = "abcdef";
+size_t s1 = sizeof(text1);
+size_t s2 = strlen(text1);
+// is 7
+// is 6
+However, if the C-style string is stored as a char* , then sizeof() returns the size of a pointer! For
+example:
+const char* text2 = "abcdef";
+size_t s3 = sizeof(text2); // is platform-dependent
+size_t s4 = strlen(text2); // is 6
+s3 will be 4 when compiled in 32-bit mode
+
+
+##Note2: literal pooling
+cout << "hello" << endl;
+In the preceding line, " hello " is a string literal because it is written as a value, not a variable. The
+actual memory associated with a string literal is in a read-only part of memory. This allows the
+compiler to optimize memory usage by reusing references to equivalent string literals. That is, even
+if your program uses the string literal " hello " 500 times, the compiler is allowed to create just one
+instance of hello in memory. This is called literal pooling.
+
+char* ptr = "hello";
+ptr[1] = 'a';
+// Assign the string literal to a variable.
+// Undefined behavior!
+A much safer way to code is to use a pointer to const characters when referring to string literals.
+The following code contains the same bug, but because it assigned the literal to a const char* , the
+compiler will catch the attempt to write to read-only memory.
+const char* ptr = "hello"; // Assign the string literal to a variable.
+ptr[1] = 'a';
+// Error! Attempts to write to read-only memory
+You can also use a string literal as an initial value for a character array ( char[] ). In this case, the
+compiler creates an array that is big enough to hold the string and copies the string to this array. So,
+the compiler will not put the literal in read-only memory and will not do any literal pooling.
+char arr[] = "hello"; // Compiler takes care of creating appropriate sized
+// character array arr.
+arr[1] = 'a';
+// The contents can be modified.
+
+
+
+##Note3:
+Raw String Literals
+Raw string literals are string literals that can span across multiple lines of code, that don’t require
+escaping of embedded double quotes,
+string str = "Hello "World"!";
+// Error!
+With a normal string you have to escape the double quotes as follows:
+string str = "Hello \"World\"!";
+With a raw string literal you can avoid the need to escape the quotes. The raw string literal starts
+with R " ( and ends with ) ".
+string str = R"(Hello "World"!)";
+Raw string literals can span across multiple lines. For example, if you write the following with
+a normal string literal, you will get a compiler error, because a normal string literal cannot span
+multiple lines:
+string str = "Line 1
+Line 2 with \t";
+// Error!
+Instead, you can use a raw string literal as follows:
+string str = R"(Line 1
+Line 2 with \t)";
+
+
+
